@@ -4,7 +4,9 @@
     <% Course.all.each do |course| %>
 
         <a href="courses/<%= course.slug %>"><%= course.name %></a>
-        - (<%= course.students.count %>/<%= course.capacity %>)
+        --- <%= course.schedule_days %>
+        --- [<%= course.start_time %> - <%= course.end_time %>]
+        --- (<%= course.students.count %>/<%= course.capacity %> students)
         
         <br>
 

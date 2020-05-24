@@ -9,10 +9,12 @@ class CoursesController < ApplicationController
     end 
 
     post '/courses' do 
+        binding.pry
         course = Course.create(params)
-        course.update(end_time: get_time(add_time(course.start_time, course.duration)), start_time: get_time(course.start_time))
+        course.update(end_time: get_time(add_time(course.start_time, course.duration)), start_time: get_time(course.start_time), schedule_days: params[:schedule_days].join(', '))
         
         current_user.courses << course
+        binding.pry
         redirect "/courses/#{course.slug}"
     end 
 
