@@ -18,6 +18,9 @@ ActiveRecord::Schema.define(version: 20200524070539) do
     t.string  "description"
     t.integer "capacity"
     t.string  "location"
+    t.string  "schedule_days"
+    t.time    "start_time"
+    t.integer "duration"
   end
 
   create_table "enrollments", force: :cascade do |t|
