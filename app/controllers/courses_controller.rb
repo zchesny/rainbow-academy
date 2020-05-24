@@ -10,6 +10,7 @@ class CoursesController < ApplicationController
 
     post '/courses' do 
         course = Course.create(params)
+        current_user << course
         redirect "/courses/#{course.slug}"
     end 
 

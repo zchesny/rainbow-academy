@@ -6,3 +6,9 @@
 <h3>Weekly Schedule:</h3>
 
 <h3>Your Courses:</h3>
+<ol>
+<% current_user.courses.each do |course| %>
+    <li><a href="../courses/<%= course.slug %>"><%= course.name %></a></li>
+<% end %>
+
+<ol>
