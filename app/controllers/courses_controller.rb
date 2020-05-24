@@ -9,8 +9,9 @@ class CoursesController < ApplicationController
     end 
 
     post '/courses' do 
-        binding.pry
         course = Course.create(params)
+        course.update(end_time: get_time(add_time(course.start_time, course.duration)), start_time: get_time(course.start_time))
+        
         current_user.courses << course
         redirect "/courses/#{course.slug}"
     end 
@@ -57,18 +58,27 @@ class CoursesController < ApplicationController
                 min = min - 60 
             end 
 
+            min = min.to_s
+            if min.length == 1 
+                min = [0, min].join
+            end
+
             end_time = [hour, min].join(":")
         end
 
         def get_time(time)
             hour = time.split(':').first.to_i
             min = time.split(':').last
+            if min.length == 1 
+                min = [0, min].join
+            end
 
             while hour >= 24
                 hour = hour - 24
             end 
             if hour == 0 
-                new_time = "#{[12, min].join(":")} AM"
+                hour = 12
+                new_time = "#{[hour, min].join(":")} AM"
             elsif hour < 12
                 new_time = "#{[hour, min].join(":")} AM"
             elsif hour == 12 
