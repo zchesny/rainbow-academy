@@ -6,5 +6,12 @@
 
 <h3>Your Courses:</h3>
     <% current_user.courses.each do |course| %>
-        <a href="../courses/<%= course.slug %>"><%= course.name %><br>
+        <a href="../courses/<%= course.slug %>"><%= course.name %></a><br>
     <% end %>
+
+<h3>Your Teachers:</h3>
+    <ol>
+        <% current_user.teachers.uniq.each do |teacher| %>
+            <li><%= teacher.username %></li>
+        <% end %>
+    <ol>

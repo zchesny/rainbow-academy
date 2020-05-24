@@ -3,7 +3,10 @@
 <% if !student? %>
     <% Course.all.each do |course| %>
 
-        <a href="courses/<%= course.slug %>"><%= course.name %></a><br>
+        <a href="courses/<%= course.slug %>"><%= course.name %></a>
+        - (<%= course.students.count %>/<%= course.capacity %>)
+        
+        <br>
 
     <% end %>
 <% end %>

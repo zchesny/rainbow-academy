@@ -2,18 +2,18 @@
 <h3>Description: </h3>
 <p><%= @course.description %></p>
 
+<h3>Enrollement: </h3>
+<p> <%= @course.students.count %> / <%= @course.capacity %> students enrolled </p>
+
+<h3>Location:</h3> 
+<p><%= @course.location %></p>
+
 <h3>Teachers: </h3>
 <ol>
     <% @course.teachers.each do |teacher| %>
        <li><%= teacher.username %></li>
     <% end %>
 </ol>
-
-<h3>Enrollement: </h3>
-<p> <%= @course.students.count %> / <%= @course.capacity %> students enrolled </p>
-
-<h3>Location:</h3> 
-<p><%= @course.location %></p>
 
 <h3>Students: </h3>
 <ol>
