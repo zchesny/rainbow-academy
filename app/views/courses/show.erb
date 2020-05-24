@@ -22,4 +22,10 @@
     <% end %>
 </ol>
 
-<a href="/courses/<%= @course.slug %>/edit">Edit Course</a>
+<% if teacher? && current_user.courses.include?(@course)%>
+    <form method="post" action="/courses/<%=@course.slug%>/delete">
+    <input id="hidden" type="hidden" name="_method" value="DELETE">
+    <input type="submit" value="Delete Course">
+    </form>
+    <a href="/courses/<%= @course.slug %>/edit">Edit Course</a>
+<% end %>

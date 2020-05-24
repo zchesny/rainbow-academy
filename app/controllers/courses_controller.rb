@@ -36,4 +36,12 @@ class CoursesController < ApplicationController
         redirect "/courses/#{course.slug}"
     end
 
+    delete '/courses/:slug/delete' do
+        course = Course.find_by_slug(params[:slug])
+        if logged_in? && current_user.courses.include?(course)
+            course.delete
+        end
+        redirect '/courses'
+    end
+
 end
