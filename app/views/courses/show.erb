@@ -9,3 +9,8 @@
 <h3>Location: <%= @course.location %></h3>
 
 <h3>Students: </h3>
+<ol>
+    <% @course.students.each do |student| %>
+       <li><%= student.username %></li>
+    <% end %>
+</ol>

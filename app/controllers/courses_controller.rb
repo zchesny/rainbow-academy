@@ -23,4 +23,16 @@ class CoursesController < ApplicationController
         redirect '/students/home'
     end
 
+    get '/courses/:slug/edit' do 
+        @course = Course.find_by_slug(params[:slug])
+        erb :'/courses/edit'
+    end
+   
+    patch '/courses/:slug' do 
+        # FIXME: prevent from updating if field is blank
+        course = Course.find_by_slug(params[:slug])
+        course.update(params[:course])
+        redirect "/courses/#{course.slug}"
+    end
+
 end
