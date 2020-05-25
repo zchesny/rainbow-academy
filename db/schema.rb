@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20200524070539) do
     t.integer "capacity"
     t.string  "location"
     t.string  "schedule_days"
+    t.string  "military_start_time"
     t.string  "start_time"
     t.integer "duration"
     t.string  "end_time"

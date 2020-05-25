@@ -81,6 +81,19 @@
     margin-top: 20px;
     padding-top: 20px;
   }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  th, td { 
+    padding: 10px;
+  }
+
+  table, th, td {
+    border: 1px solid black;
+    text-align: left;
+  }
 }
 
 @media screen and (max-width: 600px) {

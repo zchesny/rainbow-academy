@@ -34,7 +34,13 @@ class TeachersController < ApplicationController
     get '/teachers/home' do 
         # TODO: check if logged_in?
         if logged_in?
-            erb :'/teachers/home'
+            if teacher? 
+                erb :'/teachers/home'
+            elsif student?
+                redirect '/students/home'
+            else
+                redirect '/courses'
+            end
         else 
             redirect '/'
         end

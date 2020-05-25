@@ -19,13 +19,13 @@
         <input type="checkbox" name="schedule_days[]" id="<%= day %>" value="<%= day %>"><%= day %>
     <% end %><br>
 
-    <label for="start_time">Start Time:</label>
-    <input type="time" name="start_time" required>
+    <label for="military_start_time">Start Time:</label>
+    <input type="time" name="military_start_time" required>
 
     <label for="duration">Duration:</label>
     <select id="duration" name="duration" required>
-        <option value="30">30 min</option>
         <option value="60">1 hr</option>
+        <option value="30">30 min</option>
         <option value="90">1 hr 30 min</option>
         <option value="120">2 hr</option>
     </select>

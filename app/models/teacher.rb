@@ -7,5 +7,7 @@ class Teacher < ActiveRecord::Base
    
     extend Slugifiable::ClassMethods
     include Slugifiable::InstanceMethods
+    include Schedulable::InstanceMethods
+    extend Sortable::ClassMethods
 
 end 

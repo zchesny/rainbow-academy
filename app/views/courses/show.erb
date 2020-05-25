@@ -28,10 +28,31 @@
     <% end %>
 </ol>
 
+<br>
 <% if teacher? && current_user.courses.include?(@course)%>
-    <form method="post" action="/courses/<%=@course.slug%>/delete">
-    <input id="hidden" type="hidden" name="_method" value="DELETE">
-    <input type="submit" value="Delete Course">
-    </form>
-    <a href="/courses/<%= @course.slug %>/edit">Edit Course</a>
+    <table>
+        <tr>
+            <td>
+                <form method="post" action="/courses/<%=@course.slug%>/delete">
+                    <input id="hidden" type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete Course">
+                </form>
+            </td>
+            <td>
+                <form method="get" action="/courses/<%= @course.slug %>/edit">
+                    <input type="submit" value="Edit Course">
+                </form>
+            </td>
+            <td>
+                <form method="get" action="/courses/<%= @course.slug %>/teachers">
+                    <input type="submit" value="Update Teachers">
+                </form>
+            </td>
+            <td>
+                <form method="get" action="/courses/<%= @course.slug %>/enrollment">
+                    <input type="submit" value="Update Enrollments">
+                </form>
+            </td>
+        </tr>
+    </table>
 <% end %>

@@ -1,13 +1,62 @@
 <h2>Welcome, <%= current_user.username %>!</h2>
 
-<h3>Today's Schedule:</h3>
+<h3>Today's Schedule (<%= current_user.get_today %>):</h3>
+    <% Course.sort_by_time(current_user.todays_schedule).each do |course| %>
+        [<%= course.time %>]: 
+        <a href="../courses/<%= course.slug %>"><%= course.name %></a>
+        <br>
+    <% end %>
 
 <h3>Weekly Schedule:</h3>
+  <table>
+    <tr>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+    </tr>
+    <% current_user.courses.each do |course| %>
+    <tr>
+        <% if  course.scheduled_on?("Mon") %>
+            <td><%= course.name %></td>
+            <% else %>
+            <td></td>
+        <% end %>
+        <% if  course.scheduled_on?("Tue") %>
+            <td><%= course.name %></td>
+            <% else %>
+            <td></td>
+        <% end %>
+        <% if  course.scheduled_on?("Wed") %>
+            <td><%= course.name %></td>
+            <% else %>
+            <td></td>
+        <% end %>
+        <% if  course.scheduled_on?("Thu") %>
+            <td><%= course.name %></td>
+            <% else %>
+            <td></td>
+        <% end %>
+        <% if  course.scheduled_on?("Fri") %>
+            <td><%= course.name %></td>
+            <% else %>
+            <td></td>
+        <% end %>
+    </tr>
+     <% end %>
+  </table>
 
 <h3>Your Courses:</h3>
-    <% current_user.courses.each do |course| %>
-        <a href="../courses/<%= course.slug %>"><%= course.name %></a><br>
-    <% end %>
+    <ol>
+        <% current_user.courses.each do |course| %>
+            <li><a href="../courses/<%= course.slug %>"><%= course.name %></a>
+        --- <%= course.schedule_days %>
+        --- [<%= course.time %>]
+        --- (<%= course.students.count %>/<%= course.capacity %> students)
+        </li>
+        <% end %>
+    <ol>
 
 <h3>Your Teachers:</h3>
     <ol>

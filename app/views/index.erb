@@ -1,1 +1,36 @@
-<p>Welcome to the HomePage</p>
+<h3>Welcome to Rainbow Academy! Please Login or Sign Up below to enroll or manage your classes.</h3>
+<table>
+    <tr>
+        <th><h2>Student Login</h2></th>
+        <th><h2>Teacher Login</h2></th>
+    </tr>
+
+    <tr>
+        <td><form method="POST" action="/students/login">
+
+            <label for="username">Name:</label>
+            <input type="text" name="username" placeholder="Student Name Here" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" placeholder="Student Password Here" required><br>
+
+            <input type="submit" value="Student Login">
+        </form></td>
+
+        <td><form method="POST" action="/teachers/login">
+
+            <label for="username">Name:</label>
+            <input type="text" name="username" placeholder="Teacher Name Here" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" placeholder="Teacher Password Here" required><br>
+
+            <input type="submit" value="Teacher Login">
+        </form></td>
+    </tr>
+        <td><p> Don't have an account? <a href='/students/signup'>Student Sign Up</a></p></td>
+        <td><p> Don't have an account? <a href='/teachers/signup'>Teacher Sign Up</a></p></td>
+    <tr>
+
+    </tr>
+</table>

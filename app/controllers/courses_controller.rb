@@ -9,12 +9,9 @@ class CoursesController < ApplicationController
     end 
 
     post '/courses' do 
-        binding.pry
         course = Course.create(params)
-        course.update(end_time: get_time(add_time(course.start_time, course.duration)), start_time: get_time(course.start_time), schedule_days: params[:schedule_days].join(', '))
-        
+        course.update(end_time: get_time(add_time(course.military_start_time, course.duration)), start_time: get_time(course.military_start_time), schedule_days: params[:schedule_days].join('/'))
         current_user.courses << course
-        binding.pry
         redirect "/courses/#{course.slug}"
     end 
 
@@ -30,22 +27,65 @@ class CoursesController < ApplicationController
 
     get '/courses/:slug/edit' do 
         @course = Course.find_by_slug(params[:slug])
-        erb :'/courses/edit'
+        if logged_in? && teacher? && current_user.courses.include?(@course)
+            erb :'/courses/edit'
+        else 
+            redirect "/courses/#{@course.slug}"
+        end
     end
    
     patch '/courses/:slug' do 
         # FIXME: prevent from updating if field is blank
         course = Course.find_by_slug(params[:slug])
-        course.update(params[:course])
+        course.update(name: params[:course][:name]) if params[:course][:name] != ""
+        course.update(description: params[:course][:description]) if params[:course][:description] != ""
+        course.update(capacity: params[:course][:capacity]) if params[:course][:capacity] != ""
+        course.update(location: params[:course][:location]) if params[:course][:location] != ""
+        course.update(military_start_time: params[:course][:military_start_time]) if params[:course][:military_start_time] != ""
+        course.update(start_time: get_time(course.military_start_time))
+        course.update(end_time: get_time(add_time(course.start_time, course.duration)))
+        course.update(schedule_days: params[:course][:schedule_days].join('/'))
         redirect "/courses/#{course.slug}"
     end
 
     delete '/courses/:slug/delete' do
         course = Course.find_by_slug(params[:slug])
-        if logged_in? && current_user.courses.include?(course)
+        if logged_in? && teacher? && current_user.courses.include?(course)
             course.delete
         end
         redirect '/courses'
+    end
+
+    # add or remove students 
+    get '/courses/:slug/enrollment' do 
+        @course = Course.find_by_slug(params[:slug])
+        if logged_in? && teacher? && current_user.courses.include?(@course)
+            erb :'/courses/enrollment'
+        else  
+            redirect "/courses/#{course.slug}"
+        end
+    end
+
+    post '/courses/:slug/enrollment' do 
+        @course = Course.find_by_slug(params[:slug])
+        @course.update(student_ids: params[:student_ids])
+        redirect "/courses/#{@course.slug}"
+    end
+
+    # add or remove teachers 
+    get '/courses/:slug/teachers' do 
+        @course = Course.find_by_slug(params[:slug])
+        if logged_in? && teacher? && current_user.courses.include?(@course)
+            erb :'/courses/teachers'
+        else  
+            redirect "/courses/#{course.slug}"
+        end
+    end
+
+    post '/courses/:slug/teachers' do 
+        @course = Course.find_by_slug(params[:slug])
+        @course.update(teacher_ids: params[:teacher_ids])
+        redirect "/courses/#{@course.slug}"
     end
 
     helpers do 

@@ -16,20 +16,19 @@
   <body>
     <div class="wrapper">
       <h1>Rainbow Academy</h1>
-      <a href="/courses">Course Catalog</a>
-      <% if !logged_in? %>
-        <a href='/teachers/signup'>Teacher Sign Up</a>
-        <a href='/students/signup'>Student Sign Up</a>
-        <a href="/teachers/login">Teacher Login</a>
-        <a href="/students/login">Student Login</a>
-      <% elsif teacher? %>
-        <a href="/courses/new">Create Course</a>
-        <a href="/teachers/home">Dashboard</a>
-        <a href="/logout">Logout</a>
-      <% elsif student? %>
-        <a href="/students/home">Dashboard</a>
-        <a href="/logout">Logout</a>
-      <% end %>
+      <table>
+        <th><a href="/courses">Course Catalog</a></th>
+        <% if !logged_in? %>
+          <th><a href="/">Home</a></th>
+        <% elsif teacher? %>
+          <th><a href="/courses/new">Create Course</a></th>
+          <th><a href="/teachers/home">Home</a></th>
+          <th><a href="/logout">Logout</a></th>
+        <% elsif student? %>
+          <th><a href="/students/home">Home</a></th>
+          <th><a href="/logout">Logout</a></th>
+        <% end %>
+      </table>
 
         <%= yield %>
 
