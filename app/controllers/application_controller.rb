@@ -22,6 +22,14 @@ class ApplicationController < Sinatra::Base
     redirect '/'
   end
 
+  delete '/delete' do
+    if logged_in?
+        current_user.delete
+        session.destroy
+    end
+    redirect '/'
+  end
+
   helpers do 
 
     def teacher? 

@@ -1,30 +1,19 @@
 <h2>Course Catalog</h2>
-<h4><a href="/courses">Course Name</a> -- Scheduled Days --- [Start Time - End Time] --- Teachers --- (Enrolled Students)</h4><br>
-
-<% if !student? %>
-    <% Course.sort_by_name.each do |course| %>
-        <a href="courses/<%= course.slug %>"><%= course.name %></a>
-        --- <%= course.schedule_days %>
-        --- [<%= course.start_time %> - <%= course.end_time %>]
-        --- <%= course.teacher_list %>
-        --- (<%= course.students.count %>/<%= course.capacity %> students)
-        <br>
-
+<table>
+    <tr>
+        <th>Course Name</th>
+        <th>Schedule</th>
+        <th>Time</th>
+        <th>Teachers</th>
+        <th>Enrollment</th>
+    </tr>
+    <% Course.sort_by_time(Course.all).each do |course| %>
+        <tr>
+            <td><a href="courses/<%= course.slug %>"><%= course.name %></a></td>
+            <td><%= course.schedule_days %></td>
+            <td><%= course.time %></td>
+            <td><%= course.teacher_list %></td>
+            <td>(<%= course.students.count %>/<%= course.capacity %> students)</td>
+        </tr>
     <% end %>
-<% end %>
-
-<% if student? %>
-    <form method="POST" action="/courses/enroll">
-        <% Course.sort_by_name.each do |course| %>
-            <input type="checkbox" name="course_ids[]" id="<%= course.id %>" value="<%= course.id %>" <%='checked' if current_user.courses.include?(course) %>><a href="courses/<%= course.slug %>">
-            <%= course.name %></a>
-                    --- <%= course.schedule_days %>
-                    --- [<%= course.start_time %> - <%= course.end_time %>]
-                    --- <%= course.teacher_list %>
-                    --- (<%= course.students.count %>/<%= course.capacity %> students)
-        <br>
-        <% end %>
-
-        <input type="submit" value="Enroll">
-    </form>
-<% end %>
+</table>

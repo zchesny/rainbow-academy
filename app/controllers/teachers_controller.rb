@@ -5,10 +5,12 @@ class TeachersController < ApplicationController
     end
 
     post '/teachers/signup' do 
-        if params[:username] == "" || params[:password] == ""
+        if params[:name] == "" || params[:password] == ""
             redirect to '/teachers/signup'
+        elsif Teacher.find_by(name: params[:name]) != nil
+            erb :'/teachers/new', locals: {message: "Sorry, a teacher with this name already exists. Please login or sign up with a different name."}
         else
-            user = Teacher.create(username: params[:username], password: params[:password])
+            user = Teacher.create(name: params[:name], password: params[:password])
             session[:user_id] = user.id
             session[:teacher] = true
             redirect to '/teachers/home'
@@ -21,13 +23,13 @@ class TeachersController < ApplicationController
 
 
     post '/teachers/login' do 
-        user = Teacher.find_by(username: params[:username])
+        user = Teacher.find_by(name: params[:name])
         if user && user.authenticate(params[:password])
           session[:user_id] = user.id
           session[:teacher] = true 
           redirect '/teachers/home'
         else
-          redirect '/teachers/signup', locals: {message: "Sorry, we couldn't find a Student matching that username and password"}
+          redirect '/teachers/signup', locals: {message: "Sorry, we couldn't find a Student matching that name and password"}
         end
     end
 

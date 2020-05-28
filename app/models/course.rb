@@ -9,8 +9,18 @@ class Course < ActiveRecord::Base
     include Slugifiable::InstanceMethods
     extend Sortable::ClassMethods
 
+    def full?
+        course.students.count >= course.capacity
+    end 
+
+    def students_enrolled 
+    end 
+
+    def students_waitlisted 
+    end 
+
     def teacher_list
-        self.teachers.collect{|teacher| teacher.username}.join(', ')
+        self.teachers.collect{|teacher| teacher.name}.join(', ')
     end
 
     def scheduled_on?(day)

@@ -1,5 +1,12 @@
 <h2>Edit: <%= @course.name %></h2>
 
+<% unless locals.empty? %>
+    <%= message %>
+    <br>
+    <br>
+<% end %>
+
+
 <form method="POST" action="/courses/<%= @course.slug %>">
     <input id="hidden" type="hidden" name="_method" value="patch">
 

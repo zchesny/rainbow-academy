@@ -4,25 +4,67 @@ class CoursesController < ApplicationController
         erb :'/courses/index'
     end
 
+    get '/courses/enroll' do 
+        if logged_in? && student? 
+            erb :'/courses/enroll'
+        else 
+            redirect '/courses'
+        end 
+    end
+
     get '/courses/new' do 
         erb :'/courses/new' 
     end 
 
     post '/courses' do 
-        course = Course.create(params)
-        course.update(end_time: get_time(add_time(course.military_start_time, course.duration)), start_time: get_time(course.military_start_time), schedule_days: params[:schedule_days].join('/'))
-        current_user.courses << course
-        redirect "/courses/#{course.slug}"
+        if !Course.valid_name?(params[:name])
+            erb :'/courses/new', locals: {message: "Please enter a valid name using letters and numbers."}
+        elsif Course.find_by(name: params[:name]) != nil
+            erb :'/courses/new', locals: {message: "Sorry, a course with this name already exists. Please use a different name or edit the existing course."}
+        elsif params[:capacity].to_i < 1
+            erb :'/courses/new', locals: {message: "Please enter a course capcity > 0."}
+        else
+            course = Course.create(params)
+            course.update(end_time: get_time(add_time(course.military_start_time, course.duration)), start_time: get_time(course.military_start_time), schedule_days: params[:schedule_days].join('/'))
+            current_user.courses << course
+            redirect "/courses/#{course.slug}"
+        end
     end 
 
     get '/courses/:slug' do 
-        @course = Course.find_by_slug(params[:slug])
-        erb :'/courses/show'
+        if logged_in?
+            @course = Course.find_by_slug(params[:slug])
+            erb :'/courses/show'
+        else 
+            redirect '/courses'
+        end
     end
 
     post '/courses/enroll' do 
-        current_user.course_ids = params[:course_ids]
-        redirect '/students/home'
+        # check if course is full 
+        # params[:course_ids].each do |id|
+        #     if course.full?
+        #         current_user.waitlisted_courses < Course.find_by(id: id)
+        #     else 
+        #         current_user.enrolled_courses < Course.find_by(id: id) 
+        #     end 
+        # end
+        course_ids = [] 
+        course_names = [] 
+        params[:course_ids].each do |id|
+            course = Course.find_by(id: id)
+            if course.full? 
+                course_names << course.name
+            else
+                course_ids << id 
+            end 
+        end
+        current_user.course_ids = course_ids
+        if course_names.length > 0 
+            erb :'/students/home', locals: {message: "Sorry, you were unable to enroll in #{course_names.join(', ')} because these course(s) were full."}
+        else 
+            redirect '/students/home'
+        end 
     end
 
     get '/courses/:slug/edit' do 
@@ -37,15 +79,23 @@ class CoursesController < ApplicationController
     patch '/courses/:slug' do 
         # FIXME: prevent from updating if field is blank
         course = Course.find_by_slug(params[:slug])
-        course.update(name: params[:course][:name]) if params[:course][:name] != ""
-        course.update(description: params[:course][:description]) if params[:course][:description] != ""
-        course.update(capacity: params[:course][:capacity]) if params[:course][:capacity] != ""
-        course.update(location: params[:course][:location]) if params[:course][:location] != ""
-        course.update(military_start_time: params[:course][:military_start_time]) if params[:course][:military_start_time] != ""
-        course.update(start_time: get_time(course.military_start_time))
-        course.update(end_time: get_time(add_time(course.start_time, course.duration)))
-        course.update(schedule_days: params[:course][:schedule_days].join('/'))
-        redirect "/courses/#{course.slug}"
+        if !Course.valid_name?(params[:course][:name])
+            erb :'/courses/edit', locals: {message: "Please enter a valid name using letters and numbers."}
+        elsif Course.find_by(name: params[:course][:name]) != nil && course.name != params[:course][:name]
+            erb :'/courses/edit', locals: {message: "Sorry, another course with this name already exists. Please use a different name or edit the existing course."}
+        elsif params[:course][:capacity].to_i < 1
+            erb :'/courses/edit', locals: {message: "Please enter a course capcity > 0."}
+        else 
+            course.update(name: params[:course][:name]) if params[:course][:name] != ""
+            course.update(description: params[:course][:description]) if params[:course][:description] != ""
+            course.update(capacity: params[:course][:capacity]) if params[:course][:capacity] != ""
+            course.update(location: params[:course][:location]) if params[:course][:location] != ""
+            course.update(military_start_time: params[:course][:military_start_time]) if params[:course][:military_start_time] != ""
+            course.update(start_time: get_time(course.military_start_time))
+            course.update(end_time: get_time(add_time(course.start_time, course.duration)))
+            course.update(schedule_days: params[:course][:schedule_days].join('/'))
+            redirect "/courses/#{course.slug}"
+        end
     end
 
     delete '/courses/:slug/delete' do
@@ -68,8 +118,24 @@ class CoursesController < ApplicationController
 
     post '/courses/:slug/enrollment' do 
         @course = Course.find_by_slug(params[:slug])
-        @course.update(student_ids: params[:student_ids])
-        redirect "/courses/#{@course.slug}"
+        student_ids = [] 
+        student_count = 0 
+        student_names = [] 
+        params[:student_ids].each do |id|
+            student = Student.find_by(id: id)
+            if student_count < @course.capacity
+                student_ids << id 
+                student_count += 1
+            else 
+                student_names << student.name 
+            end 
+        end 
+        @course.update(student_ids: student_ids)
+        if student_names.length > 0 
+            erb :'/courses/show', locals: {message: "Sorry, the following students were unable to enroll because the course was at maximum capacity: \n #{student_names.join(', ')}"}
+        else 
+            redirect "/courses/#{@course.slug}"
+        end 
     end
 
     # add or remove teachers 

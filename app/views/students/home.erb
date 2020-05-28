@@ -1,12 +1,22 @@
-<h2>Welcome, <%= current_user.username %>!</h2>
+<h2>Welcome, <%= current_user.name %>!</h2>
+<% unless locals.empty? %>
+    <%= message %>
+    <br>
+<% end %>
+
+<form method="post" action="/delete">
+    <input id="hidden" type="hidden" name="_method" value="DELETE">
+    <input type="submit" value="Delete Profile">
+</form>
 
 <h3>Today's Schedule (<%= current_user.get_today %>):</h3>
     <% Course.sort_by_time(current_user.todays_schedule).each do |course| %>
-        [<%= course.time %>]: 
+        [<%= course.time %>] 
         <a href="../courses/<%= course.slug %>"><%= course.name %></a>
         <br>
     <% end %>
 
+<br>
 <h3>Weekly Schedule:</h3>
   <table>
     <tr>
@@ -47,20 +57,30 @@
      <% end %>
   </table>
 
+<br>
 <h3>Your Courses:</h3>
-    <ol>
-        <% current_user.courses.each do |course| %>
-            <li><a href="../courses/<%= course.slug %>"><%= course.name %></a>
-        --- <%= course.schedule_days %>
-        --- [<%= course.time %>]
-        --- (<%= course.students.count %>/<%= course.capacity %> students)
-        </li>
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Schedule</th>
+            <th>Time</th>
+            <th>Teachers</th>
+        </tr>
+        <% Course.sort_by_time(current_user.courses).each do |course| %>
+            <tr>
+                <td><a href="courses/<%= course.slug %>"><%= course.name %></a></td>
+                <td><%= course.schedule_days %></td>
+                <td><%= course.time %></td>
+                <td><%= course.teacher_list %></td>
+            </tr>
         <% end %>
-    <ol>
+    </table>
 
+<br>
 <h3>Your Teachers:</h3>
     <ol>
         <% current_user.teachers.uniq.each do |teacher| %>
-            <li><%= teacher.username %></li>
+            <li><%= teacher.name %></li>
         <% end %>
     <ol>
+

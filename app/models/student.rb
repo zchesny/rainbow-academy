@@ -9,4 +9,9 @@ class Student < ActiveRecord::Base
     include Slugifiable::InstanceMethods
     include Schedulable::InstanceMethods
     extend Sortable::ClassMethods
+
+    attr_accessor :enrolled_courses, :waitlisted_courses
+
+    @enrolled_courses = [] 
+    @waitlisted_courses = [] 
 end 

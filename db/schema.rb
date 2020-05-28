@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20200524070539) do
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "username"
+    t.string "name"
     t.string "password_digest"
   end
 
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20200524070539) do
   end
 
   create_table "teachers", force: :cascade do |t|
-    t.string "username"
+    t.string "name"
     t.string "password_digest"
   end
 

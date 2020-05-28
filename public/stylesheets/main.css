@@ -13,7 +13,7 @@
 
   /* --- Welcome Page Styles --- */
   body {
-    background-color: lightblue;
+    background-color: pink;
     color: #333;
     font-family: Sans-Serif;
     line-height: 18px;
@@ -93,6 +93,11 @@
   table, th, td {
     border: 1px solid black;
     text-align: left;
+  }
+
+  ol li {
+    display: list-item;
+    list-style-position: inside;
   }
 }
 
