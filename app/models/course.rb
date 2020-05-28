@@ -10,14 +10,14 @@ class Course < ActiveRecord::Base
     extend Sortable::ClassMethods
 
     def full?
-        course.students.count >= course.capacity
+        self.students.count >= self.capacity
     end 
 
-    def students_enrolled 
-    end 
+    # def students_enrolled 
+    # end 
 
-    def students_waitlisted 
-    end 
+    # def students_waitlisted 
+    # end 
 
     def teacher_list
         self.teachers.collect{|teacher| teacher.name}.join(', ')

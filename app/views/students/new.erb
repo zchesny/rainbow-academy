@@ -1,7 +1,6 @@
 <h2>Student Sign Up</h2>
 <% unless locals.empty? %>
-    <%= message %>
-    <br>
+   <p class="message"><%= message%></p>
 <% end %>
 
 <form method="POST" action="/students/signup">

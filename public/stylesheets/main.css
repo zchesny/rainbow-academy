@@ -1,7 +1,6 @@
 @media screen {
   /* --- Reset Styles --- */
   * {
-    list-style: none;
     margin: 0;
     padding: 0;
   }
@@ -13,7 +12,7 @@
 
   /* --- Welcome Page Styles --- */
   body {
-    background-color: pink;
+    background-color: purple;
     color: #333;
     font-family: Sans-Serif;
     line-height: 18px;
@@ -95,9 +94,17 @@
     text-align: left;
   }
 
+  ol {
+    list-style-type: decimal; 
+  }
+
   ol li {
     display: list-item;
     list-style-position: inside;
+  }
+
+  .message {
+    color: red 
   }
 }
 

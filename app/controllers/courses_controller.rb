@@ -61,7 +61,7 @@ class CoursesController < ApplicationController
         end
         current_user.course_ids = course_ids
         if course_names.length > 0 
-            erb :'/students/home', locals: {message: "Sorry, you were unable to enroll in #{course_names.join(', ')} because these course(s) were full."}
+            erb :'/students/home', locals: {message: "Sorry, you were unable to enroll in the following courses because they were at maximum capacity: #{course_names.join(', ')}"}
         else 
             redirect '/students/home'
         end 
@@ -132,7 +132,7 @@ class CoursesController < ApplicationController
         end 
         @course.update(student_ids: student_ids)
         if student_names.length > 0 
-            erb :'/courses/show', locals: {message: "Sorry, the following students were unable to enroll because the course was at maximum capacity: \n #{student_names.join(', ')}"}
+            erb :'/courses/show', locals: {message: "Sorry, the following students were unable to enroll because the course was at maximum capacity: #{student_names.join(', ')}"}
         else 
             redirect "/courses/#{@course.slug}"
         end 
