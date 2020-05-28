@@ -30,6 +30,11 @@ class ApplicationController < Sinatra::Base
     redirect '/'
   end
 
+  not_found do
+    status 404
+    erb :error_404
+  end
+
   helpers do 
 
     def teacher? 
