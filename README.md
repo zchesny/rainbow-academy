@@ -22,11 +22,14 @@ This is a Dynamic Sinatra Web Application that enables course creation, enrollme
 - [x] Have a list of student(s) who are enrolled in this course
 
 ### Validation Features
+- [x] Prevents people from seeing course details without logging in
 - [x] Prevents duplicate teacher names 
 - [x] Prevents duplicate student names 
 - [x] Prevents duplicate course names 
 - [x] Prevents courses from being created if they do not have a valid name, description, valid capacity, location, start time, and duration
 - [x] Prevents courses from being enrolled beyond capacity 
+- [x] Prevents students from editing, deleting, and updating any course 
+- [x] Prevents teachers from editing, deleting, and updating courses they do not teach
 
 ### Future Features
 - [ ] Waitlisting classes 
