@@ -1,0 +1,9 @@
+<h3>Update Enrollments: </h3>
+
+    <form method="POST" action="/courses/<%= @course.slug %>/enrollment">
+        <% Student.sort_by_name.each do |student| %>
+            <input type="checkbox" name="student_ids[]" id="<%= student.id %>" value="<%= student.id %>" <%='checked' if @course.students.include?(student) %>><%= student.name %><br>
+        <% end %>
+
+        <input type="submit" value="Update">
+    </form>

@@ -1,0 +1,23 @@
+<h2>Enrollments</h2>
+<p>Please check the box(es) next to the course(s) you'd like to enroll in. Then click "Enroll". Boxes that are already checked are classes you are currently enrolled in.</p>
+
+<table>
+    <tr>
+        <th>Course Name</th>
+        <th>Schedule</th>
+        <th>Time</th>
+        <th>Teachers</th>
+        <th>Enrollment</th>
+    </tr>
+    <form method="POST" action="/courses/enroll">
+        <% Course.sort_by_time(Course.all).each do |course| %><tr>
+            <td><input type="checkbox" name="course_ids[]" id="<%= course.id %>" value="<%= course.id %>" <%='checked' if current_user.courses.include?(course) %>><a href="courses/<%= course.slug %>"><%= course.name %></a></td>
+            <td><%= course.schedule_days %></td>
+            <td><%= course.time %></td>
+            <td><%= course.teacher_list %></td>
+            <td>(<%= course.students.count %>/<%= course.capacity %> students)</td>
+        </tr><% end %>
+
+        <input type="submit" value="Enroll">
+    </form>
+</table>
