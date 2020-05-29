@@ -29,7 +29,7 @@ class StudentsController < ApplicationController
           session[:student] = true 
           redirect '/students/home'
         else
-          redirect '/students/signup', locals: {message: "Sorry, we couldn't find a Student matching that name and password"}
+          erb :'/students/new', locals: {message: "Sorry, we couldn't find a Student matching that name and password"}
         end
     end
 
