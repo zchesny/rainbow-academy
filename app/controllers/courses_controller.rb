@@ -77,25 +77,35 @@ class CoursesController < ApplicationController
     end
    
     patch '/courses/:slug' do 
-        # FIXME: prevent from updating if field is blank
-        course = Course.find_by_slug(params[:slug])
-        if !Course.valid_name?(params[:course][:name])
-            erb :'/courses/edit', locals: {message: "Please enter a valid name using letters and numbers."}
-        elsif Course.find_by(name: params[:course][:name]) != nil && course.name != params[:course][:name]
-            erb :'/courses/edit', locals: {message: "Sorry, another course with this name already exists. Please use a different name or edit the existing course."}
-        elsif params[:capacity].to_i < 1 || params[:capacity].to_i > 9999
-            erb :'/courses/edit', locals: {message: "Please enter a course capcity between 1-9999."}
-        else 
-            course.update(name: params[:course][:name]) if params[:course][:name] != ""
-            course.update(description: params[:course][:description]) if params[:course][:description] != ""
-            course.update(capacity: params[:course][:capacity]) if params[:course][:capacity] != ""
-            course.update(location: params[:course][:location]) if params[:course][:location] != ""
-            course.update(military_start_time: params[:course][:military_start_time]) if params[:course][:military_start_time] != ""
-            course.update(start_time: get_time(course.military_start_time))
-            course.update(end_time: get_time(add_time(course.start_time, course.duration)))
-            course.update(schedule_days: params[:course][:schedule_days].join('/'))
-            redirect "/courses/#{course.slug}"
-        end
+        # check for valid name 
+        @course = Course.find_by_slug(params[:slug])
+        if  params[:course][:name] != ""
+            if !Course.valid_name?(params[:course][:name])
+                erb :'/courses/edit', locals: {message: "Please enter a valid name using letters and numbers."}
+            elsif Course.find_by(name: params[:course][:name]) != nil && @course.name != params[:course][:name]
+                erb :'/courses/edit', locals: {message: "Sorry, another course with this name already exists. Please use a different name or edit the existing course."}
+            else 
+                @course.update(name: params[:course][:name])
+            end
+        end 
+        
+        # check for valid capacity
+        if params[:course][:capacity] != ""
+            if params[:course][:capacity].to_i < 1 || params[:course][:capacity].to_i > 9999
+                erb :'/courses/edit', locals: {message: "Please enter a course capcity between 1-9999."}
+            else  
+                @course.update(capacity: params[:course][:capacity])
+            end
+        end  
+
+        # prevent from updating if field is blank
+        @course.update(description: params[:course][:description]) if params[:course][:description] != ""
+        @course.update(location: params[:course][:location]) if params[:course][:location] != ""
+        @course.update(military_start_time: params[:course][:military_start_time]) if params[:course][:military_start_time] != ""
+        @course.update(start_time: get_time(@course.military_start_time))
+        @course.update(end_time: get_time(add_time(@course.start_time, @course.duration)))
+        @course.update(schedule_days: params[:course][:schedule_days].join('/'))
+        redirect "/courses/#{@course.slug}"
     end
 
     delete '/courses/:slug/delete' do
