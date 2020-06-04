@@ -5,6 +5,8 @@ class Course < ActiveRecord::Base
     has_many :teacher_courses 
     has_many :teachers, through: :teacher_courses 
 
+    belongs_to :category
+
     extend Slugifiable::ClassMethods
     include Slugifiable::InstanceMethods
     extend Sortable::ClassMethods

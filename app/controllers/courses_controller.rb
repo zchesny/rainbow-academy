@@ -24,10 +24,16 @@ class CoursesController < ApplicationController
         elsif params[:capacity].to_i < 1 || params[:capacity].to_i > 9999
             erb :'/courses/new', locals: {message: "Please enter a course capacity between 1-9999."}
         else
-            course = Course.create(params)
-            course.update(end_time: get_time(add_time(course.military_start_time, course.duration)), start_time: get_time(course.military_start_time), schedule_days: params[:schedule_days].join('/'))
-            current_user.courses << course
-            redirect "/courses/#{course.slug}"
+            course = Course.new(params)
+            if course.save
+                # course = Course.create(params)
+                course.update(end_time: get_time(add_time(course.military_start_time, course.duration)), start_time: get_time(course.military_start_time), schedule_days: params[:schedule_days].join('/'))
+                current_user.courses << course
+                redirect "/courses/#{course.slug}"
+            else
+                # some kind of error 
+                erb :'/courses/new', locals: {message: "An error occurred."}
+            end
         end
     end 
 
