@@ -46,6 +46,7 @@ GEM
       ruby2_keywords (~> 0.0.1)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
+    pg (0.15.1)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -55,6 +56,11 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.5)
+    rails_stdout_logging (0.0.5)
     rake (13.0.1)
     regexp_parser (1.7.0)
     require_all (3.0.0)
@@ -115,8 +121,10 @@ DEPENDENCIES
   bcrypt
   capybara
   database_cleaner-active_record
+  pg (= 0.15.1)
   pry
   rack-test
+  rails_12factor
   rake
   require_all
   rspec
